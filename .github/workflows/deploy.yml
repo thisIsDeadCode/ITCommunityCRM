@@ -1,0 +1,38 @@
+name: Build artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_back:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        run: docker buildx build -o back ITCommunityCRM -f ITCommunityCRM/Dockerfile
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: backend
+          path: back
+
+      - uses: vimtor/action-zip@v1.1
+        with:
+          files: back
+          dest: backend.zip
+          
+      - uses: igubanov/action-freeasphosting-deploy@work/v0.0.1
+        name: Deploying
+        with:
+          login: ${{ secrets.FREEASPHOSTING_LOGIN }}
+          password: ${{ secrets.FREEASPHOSTING_PASSWORD }}
+          pathToZipFile: 'backend.zip'
