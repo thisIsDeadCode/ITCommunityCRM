@@ -1,6 +1,8 @@
 using ITCommunityCRM.Data;
 using ITCommunityCRM.Models;
+using ITCommunityCRM.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ITCommunityCRMIdentityDbContext>();
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
