@@ -4,11 +4,11 @@ namespace ITCommunityCRM.Models.Dto
 {
     public class UserTelegramDto
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string UserName { get; set; }
-        public string AuthDate { get; set; }
-        public string Hash { get; set; }
+        public string id { get; set; }
+        public string first_name { get; set; }
+        public string user_name { get; set; }
+        public string auth_date { get; set; }
+        public string hash { get; set; }
 
         public override string ToString()
         {
@@ -16,22 +16,22 @@ namespace ITCommunityCRM.Models.Dto
 
             dataStringBuilder.Append("auth_date");
             dataStringBuilder.Append('=');
-            dataStringBuilder.Append(this.AuthDate);
+            dataStringBuilder.Append(this.first_name);
             dataStringBuilder.Append('\n');
 
             dataStringBuilder.Append("first_name");
             dataStringBuilder.Append('=');
-            dataStringBuilder.Append(this.FirstName);
+            dataStringBuilder.Append(this.user_name);
             dataStringBuilder.Append('\n');
 
             dataStringBuilder.Append("id");
             dataStringBuilder.Append('=');
-            dataStringBuilder.Append(this.Id);
+            dataStringBuilder.Append(this.id);
             dataStringBuilder.Append('\n');
 
             dataStringBuilder.Append("usert_name");
             dataStringBuilder.Append('=');
-            dataStringBuilder.Append(this.UserName);
+            dataStringBuilder.Append(this.auth_date);
             //     dataStringBuilder.Append('\n');
 
             return dataStringBuilder.ToString();
