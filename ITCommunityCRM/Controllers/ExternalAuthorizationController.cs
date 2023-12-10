@@ -50,10 +50,9 @@ namespace ITCommunityCRM.Controllers
                 await _userManager.AddLoginAsync(user_tel, info);
                 await _signInManager.SignInAsync(user_tel, true);
                 return RedirectToAction("Index", "Home");
+
             }
-
-            return RedirectToPage("./Login");
-
+            return RedirectToAction("Login", "Account");
 
 
 

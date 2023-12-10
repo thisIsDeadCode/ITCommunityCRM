@@ -1,6 +1,7 @@
 using ITCommunityCRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace ITCommunityCRM.Controllers
 {
@@ -13,8 +14,24 @@ namespace ITCommunityCRM.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(
+            string id = null,
+            string first_name = null,
+            string username = null,
+            string auth_date = null,
+            string hash = null)
         {
+            if (
+                !string.IsNullOrEmpty(id) &&
+                !string.IsNullOrEmpty(first_name) &&
+                !string.IsNullOrEmpty(username) &&
+                !string.IsNullOrEmpty(auth_date) &&
+                !string.IsNullOrEmpty(hash)
+            )
+            {
+                return RedirectToAction("TelegramLogin", "ExternalAuthorization", new { id, first_name, username, auth_date, hash });
+            }
+
             return View();
         }
 
@@ -22,6 +39,8 @@ namespace ITCommunityCRM.Controllers
         {
             return View();
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
