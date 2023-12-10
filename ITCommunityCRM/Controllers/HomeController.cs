@@ -14,24 +14,8 @@ namespace ITCommunityCRM.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(
-            string id = null,
-            string first_name = null,
-            string username = null,
-            string auth_date = null,
-            string hash = null)
+        public IActionResult Index()
         {
-            if (
-                !string.IsNullOrEmpty(id) &&
-                !string.IsNullOrEmpty(first_name) &&
-                !string.IsNullOrEmpty(username) &&
-                !string.IsNullOrEmpty(auth_date) &&
-                !string.IsNullOrEmpty(hash)
-            )
-            {
-                return RedirectToAction("TelegramLogin", "ExternalAuthorization", new { id, first_name, username, auth_date, hash });
-            }
-
             return View();
         }
 
