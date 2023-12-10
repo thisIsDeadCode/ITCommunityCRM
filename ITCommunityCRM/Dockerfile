@@ -3,7 +3,6 @@ WORKDIR /app
 
 # Copy everything
 COPY . .
-WORKDIR /app/ITCommunityCRM
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release
