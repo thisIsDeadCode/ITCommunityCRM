@@ -1,4 +1,5 @@
-﻿using ITCommunityCRM.Models.Configuration;
+﻿using ITCommunityCRM.Data.Models.Consts;
+using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -40,7 +41,7 @@ namespace ITCommunityCRM.Controllers
             var providerKey = id;
             if (myHashStr == hash)
             {
-                var info = new UserLoginInfo("Telegram", providerKey, "Telegram");
+                var info = new UserLoginInfo(UserLoginInfoConst.TelegramLoginProvider, providerKey, UserLoginInfoConst.TelegramLoginProvider);
                 var user_tel = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
                 if (user_tel == null)
                 {

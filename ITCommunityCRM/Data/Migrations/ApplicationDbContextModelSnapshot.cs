@@ -8,7 +8,7 @@ using System;
 
 namespace ITCommunityCRM.Data.Migrations
 {
-    [DbContext(typeof(ITCommunityCRMIdentityDbContext))]
+    [DbContext(typeof(ITCommunityCRMDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
