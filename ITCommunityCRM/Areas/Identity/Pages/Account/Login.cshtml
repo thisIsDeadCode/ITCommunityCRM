@@ -5,56 +5,71 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
+<div class="limiter">
+    <div class="container-login100" style="background-image: url(@Url.Content("~/images/bg-01.jpg"));">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <form id="account" method="post" class="login100-form validate-form">
+                <span class="login100-form-title p-b-49">
+                    Login
+                </span>
+
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
+                <div class="wrap-input100 validate-input m-b-23">
+                    <label asp-for="Input.Email" class="label-input100">Email</label>
+                    <input asp-for="Input.Email" class="input100" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
+
+                <div class="wrap-input100 validate-input">
+                    <label asp-for="Input.Password" class="label-input100">Password</label>
+                    <input asp-for="Input.Password" class="input100" autocomplete="current-password" aria-required="true" placeholder="password"/>
+                    <span class="focus-input100" data-symbol="&#xf190;"></span>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                <div class="flex-wrap p-t-15">
+                    <input asp-for="Input.RememberMe"/>
+                    <label asp-for="Input.RememberMe" class="label-input100">
                         @Html.DisplayNameFor(m => m.Input.RememberMe)
                     </label>
                 </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+
+                <div class="text-right p-t-8 p-b-31">
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                 </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button id="login-submit" type="submit" class="login100-form-btn">Log in</button>
+                    </div>
+                </div>
+
+                <div class="txt1 text-center p-t-54 p-b-20">
+                    <span>
+                        Or Log in Using
+                    </span>
+                </div>
+
+                <div class="flex-c-m">
+                    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="ITCommunityCRM_BOT" data-size="medium" data-auth-url="https://igubanov.bsite.net/ExternalAuthorization/TelegramLogin" data-request-access="write"></script>
+                </div>
+
+                <div class="flex-col-c p-t-25">
+                    <span class="txt1 p-b-17">
+                        Or Register Using
+                    </span>
+
+                    <a class="txt2" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                 </div>
             </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="ITCommunityCRM_BOT" data-size="medium" data-auth-url="https://igubanov.bsite.net/ExternalAuthorization/TelegramLogin" data-request-access="write"></script>
-        </section>
+        </div>
     </div>
 </div>
 
+
+<div id="dropDownSelect1"></div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
