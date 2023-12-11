@@ -36,23 +36,22 @@ builder.Services.AddTransient<TelegramNotification>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+using (var scope = app.Services.CreateScope())
+using (var context = scope.ServiceProvider.GetService<ITCommunityCRMDbContext>())
 {
-    using (var scope = app.Services.CreateScope())
-    using (var context = scope.ServiceProvider.GetService<ITCommunityCRMDbContext>())
-    {
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-    }
-    app.UseMigrationsEndPoint();
+    context.Database.EnsureDeleted();
+    context.Database.EnsureCreated();
 }
-else
-{
-    app.UseMigrationsEndPoint();
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+app.UseMigrationsEndPoint();
+//}
+//else
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+//}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
