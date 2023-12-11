@@ -3,7 +3,7 @@ using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
 using Microsoft.EntityFrameworkCore;
 
-namespace ITCommunityCRM.Servises
+namespace ITCommunityCRM.Services
 {
     public class NotificationService
     {
