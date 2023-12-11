@@ -1,6 +1,7 @@
 using ITCommunityCRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace ITCommunityCRM.Controllers
 {
@@ -22,6 +23,8 @@ namespace ITCommunityCRM.Controllers
         {
             return View();
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

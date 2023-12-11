@@ -9,7 +9,7 @@ using System;
 
 namespace ITCommunityCRM.Data.Migrations
 {
-    [DbContext(typeof(ITCommunityCRMIdentityDbContext))]
+    [DbContext(typeof(ITCommunityCRMDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
