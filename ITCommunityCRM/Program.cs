@@ -38,11 +38,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-using (var scope = app.Services.CreateScope())
-using (var context = scope.ServiceProvider.GetService<ITCommunityCRMDbContext>())
-{
-    context.Database.EnsureCreated();
-}
 app.UseMigrationsEndPoint();
 //}
 //else
