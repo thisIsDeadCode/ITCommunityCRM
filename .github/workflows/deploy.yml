@@ -30,7 +30,7 @@ jobs:
           files: back
           dest: backend.zip
           
-      - uses: igubanov2/action-freeasphosting-deploy@work/v0.0.1
+      - uses: igubanov/action-freeasphosting-deploy@work/v0.0.1
         name: Deploying
         with:
           login: ${{ secrets.FREEASPHOSTING_LOGIN }}
