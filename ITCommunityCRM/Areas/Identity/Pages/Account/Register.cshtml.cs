@@ -80,6 +80,9 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+            
+            [Display(Name = "Telegram Username")]
+            public string Telegram { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -116,6 +119,7 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.Telegram = Input.Telegram;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -134,17 +138,19 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
+                    // заглушка
+                    return RedirectToPage("RegisterConfirmation",
+                        new { email = Input.Email, returnUrl = returnUrl });
                     // TODO: нужен аккаунт для smtp 
-                    try
+                    /*try
                     {
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                     }
-                    catch // заглушка
+                    catch 
                     {
-                        return RedirectToPage("RegisterConfirmation",
-                            new { email = Input.Email, returnUrl = returnUrl });
-                    }
+                        
+                    }*/
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);

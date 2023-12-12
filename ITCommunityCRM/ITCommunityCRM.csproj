@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Models\Dto\" />
     <Folder Include="Models\External\" />
   </ItemGroup>
