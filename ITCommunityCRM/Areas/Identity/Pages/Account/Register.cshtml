@@ -4,63 +4,76 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="limiter">
+    <div class="container-login100" style="background-image: url(@Url.Content("~/images/bg-01.jpg"));">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="login100-form validate-form">
+                <span class="login100-form-title p-b-49">
+                    Create a new account.
+                </span>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            Will register via telegram (button)
-                        </p>
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="wrap-input100 validate-input m-b-23">
+                    <label asp-for="Input.Email" class="label-input100">Email</label>
+                    <input asp-for="Input.Email" class="input100" autocomplete="username" aria-required="true" placeholder="name@example.com"/>
+                    <span class="focus-input100" data-symbol="&#xf206;"></span>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-23">
+                    <label asp-for="Input.Telegram" class="label-input100">Telegram (if you need notices)</label>
+                    <input asp-for="Input.Telegram" class="input100" aria-required="true" placeholder="username"/>
+                    <span class="focus-input100" data-symbol="&#xf1d9;"></span>
+                    <span asp-validation-for="Input.Telegram" class="text-danger"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-23">
+                    <label asp-for="Input.Password" class="label-input100">Password</label>
+                    <input asp-for="Input.Password" class="input100" autocomplete="current-password" aria-required="true" placeholder="password"/>
+                    <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-31">
+                    <label asp-for="Input.ConfirmPassword" class="label-input100">Password repeat</label>
+                    <input asp-for="Input.ConfirmPassword" class="input100" autocomplete="new-password" aria-required="true" placeholder="password repeat"/>
+                    <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <button id="login-submit" type="submit" class="login100-form-btn">Register</button>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+                </div>
+
+                <div class="flex-col-c p-t-25">
+                    <span class="txt1 p-b-17">
+                        Or Register Using
+                    </span>
+
+                    <div class="flex-c-m">
+                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="ITCommunityCRM_BOT" data-size="medium" data-auth-url="https://igubanov.bsite.net/ExternalAuthorization/TelegramLogin" data-request-access="write"></script>
+                    </div>
+                </div>
+
+                <div class="txt1 text-center p-t-54 p-b-20">
+                    <span>
+                        Or Log in Using
+                    </span>
+
+                    <a class="txt2" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Log in as a existed user</a>
+                </div>
+                
+            </form>
+        </div>
     </div>
 </div>
 
+
+<div id="dropDownSelect1"></div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
