@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ITCommunityCRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -21,13 +22,13 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public string TgAuthUrl { get; private set; }
         public string TgBotName { get; private set; }
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IOptions<AppSettings> appSettings)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, IOptions<AppSettings> appSettings)
         {
             _signInManager = signInManager;
             _logger = logger;

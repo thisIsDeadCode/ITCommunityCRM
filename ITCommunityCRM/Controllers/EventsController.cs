@@ -9,7 +9,7 @@ using ITCommunityCRM.Data;
 using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Models.View.Extensions;
 using ITCommunityCRM.Models.View.Events;
-using ITCommunityCRM.Servises;
+using ITCommunityCRM.Services;
 
 namespace ITCommunityCRM.Controllers
 {
