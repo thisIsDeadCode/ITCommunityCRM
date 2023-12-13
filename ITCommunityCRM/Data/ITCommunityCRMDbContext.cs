@@ -1,11 +1,12 @@
-﻿using ITCommunityCRM.Data.Models;
+﻿using ITCommunityCRM.Models;
+using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITCommunityCRM.Data
 {
-    public class ITCommunityCRMDbContext : IdentityDbContext
+    public class ITCommunityCRMDbContext : IdentityDbContext<User>
     {
         public DbSet<Event> Events { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }

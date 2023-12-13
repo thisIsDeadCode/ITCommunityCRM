@@ -1,7 +1,9 @@
 using ITCommunityCRM.Data;
 using ITCommunityCRM.Models.Configuration;
-using ITCommunityCRM.Servises;
+using ITCommunityCRM.Models;
+using ITCommunityCRM.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
@@ -15,7 +17,7 @@ builder.Services.AddDbContext<ITCommunityCRMDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ITCommunityCRMDbContext>();
 builder.Services.AddControllersWithViews();
 
