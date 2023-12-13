@@ -5,4 +5,13 @@ namespace ITCommunityCRM.Models;
 public class User : IdentityUser
 {
     public string? Telegram { get; set; }
+    public User() : base()
+    {
+
+    }
+
+    public User(string username) : base(username)
+    {
+
+    }
 }

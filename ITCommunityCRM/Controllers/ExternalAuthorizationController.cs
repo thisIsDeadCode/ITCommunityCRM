@@ -1,4 +1,5 @@
 ﻿using ITCommunityCRM.Data.Models.Consts;
+using ITCommunityCRM.Models;
 using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +12,13 @@ namespace ITCommunityCRM.Controllers
 {
     public class ExternalAuthorizationController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
         private readonly AppSettings _appSettings;
         public ExternalAuthorizationController(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+            SignInManager<User> signInManager,
+            UserManager<User> userManager,
             IOptions<AppSettings> appSettings
             )
         {
@@ -44,7 +45,7 @@ namespace ITCommunityCRM.Controllers
                 var user_tel = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
                 if (user_tel == null)
                 {
-                    user_tel = new IdentityUser(username ?? first_name);
+                    user_tel = new User(username ?? first_name) { Telegram = null};
                     await _userManager.CreateAsync(user_tel);
                 }
                 await _userManager.AddLoginAsync(user_tel, info);
