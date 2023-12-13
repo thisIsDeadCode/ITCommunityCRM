@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using ITCommunityCRM.Models.Configuration;
 
 namespace ITCommunityCRM.Areas.Identity.Pages.Account
 {
@@ -22,10 +24,16 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public string TgAuthUrl { get; private set; }
+        public string TgBotName { get; private set; }
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IOptions<AppSettings> appSettings)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this.TgBotName = appSettings.Value.TelegramBotName;
+            var host = appSettings.Value.Host;
+            this.TgAuthUrl = $"https://{host}/ExternalAuthorization/TelegramLogin";
         }
 
         /// <summary>
