@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using ITCommunityCRM.Models;
+using ITCommunityCRM.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

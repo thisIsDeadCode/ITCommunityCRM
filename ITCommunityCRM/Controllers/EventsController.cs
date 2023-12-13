@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ITCommunityCRM.Data;
+using ITCommunityCRM.Models.View.Events;
+using ITCommunityCRM.Models.View.Extensions;
+using ITCommunityCRM.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ITCommunityCRM.Data;
-using ITCommunityCRM.Data.Models;
-using ITCommunityCRM.Models.View.Extensions;
-using ITCommunityCRM.Models.View.Events;
-using ITCommunityCRM.Services;
 
 namespace ITCommunityCRM.Controllers
 {
@@ -27,7 +22,9 @@ namespace ITCommunityCRM.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var iTCommunityCRMDbContext = _context.Events.Include(x => x.NotificationType);
+            var iTCommunityCRMDbContext = _context.Events
+                .Include(x => x.NotificationTemplate)
+                .ThenInclude(x => x.NotificationType);
             return View(await iTCommunityCRMDbContext.ToListAsync());
         }
 
@@ -40,7 +37,8 @@ namespace ITCommunityCRM.Controllers
             }
 
             var xevent = await _context.Events
-                .Include(x => x.NotificationType)
+                .Include(x => x.NotificationTemplate)
+                .ThenInclude(x => x.NotificationType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (xevent == null)
             {
@@ -53,7 +51,7 @@ namespace ITCommunityCRM.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Type");
+            ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
             return View();
         }
 
@@ -62,7 +60,7 @@ namespace ITCommunityCRM.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,NotificationTypeId")] CreateEventViewModel xevent)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate,NotificationMessageTemplateId")] CreateEventViewModel xevent)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +71,7 @@ namespace ITCommunityCRM.Controllers
                 await _notificationService.NotificateAsync(e.Id);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Id", xevent.NotificationTypeId);
+            ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
             return View(xevent);
         }
 
@@ -90,7 +88,7 @@ namespace ITCommunityCRM.Controllers
             {
                 return NotFound();
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Type", xevent.NotificationTypeId);
+            ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
             return View(xevent.ConvertToEditEventViewModel());
         }
 
@@ -99,7 +97,7 @@ namespace ITCommunityCRM.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NotificationTypeId")] EditEventViewModel xevent)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate,NotificationMessageTemplateId")] EditEventViewModel xevent)
         {
             if (id != xevent.Id)
             {
@@ -126,7 +124,7 @@ namespace ITCommunityCRM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Type", xevent.NotificationTypeId);
+            ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
             return View(xevent);
         }
 
@@ -139,7 +137,8 @@ namespace ITCommunityCRM.Controllers
             }
 
             var xevent = await _context.Events
-                .Include(x => x.NotificationType)
+                .Include(x => x.NotificationTemplate)
+                .ThenInclude(x => x.NotificationType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (xevent == null)
             {

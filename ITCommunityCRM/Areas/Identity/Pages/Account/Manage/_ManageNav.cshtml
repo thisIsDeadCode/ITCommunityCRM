@@ -1,4 +1,4 @@
-﻿@using ITCommunityCRM.Models
+﻿@using ITCommunityCRM.Data.Models
 @inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

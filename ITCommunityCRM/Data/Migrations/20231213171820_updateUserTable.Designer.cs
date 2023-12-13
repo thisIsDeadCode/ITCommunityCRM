@@ -4,6 +4,7 @@ using ITCommunityCRM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITCommunityCRM.Data.Migrations
 {
     [DbContext(typeof(ITCommunityCRMDbContext))]
-    partial class ITCommunityCRMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231213171820_updateUserTable")]
+    partial class updateUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,60 +33,21 @@ namespace ITCommunityCRM.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NotificationMessageTemplateId")
+                    b.Property<int>("NotificationTypeId")
                         .HasColumnType("int");
-
-                    b.Property<int>("NotificationTemplateId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NotificationTemplateId");
+                    b.HasIndex("NotificationTypeId");
 
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("ITCommunityCRM.Data.Models.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<long>("GroupIdCode")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationTemplate", b =>
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationMessageTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,16 +59,11 @@ namespace ITCommunityCRM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NotificationTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NotificationTypeId");
 
                     b.ToTable("NotificationMessageTemplates");
 
@@ -113,7 +72,6 @@ namespace ITCommunityCRM.Data.Migrations
                         {
                             Id = 1,
                             MessageTemplate = "Hi",
-                            NotificationTypeId = 3,
                             Title = "Title"
                         });
                 });
@@ -171,10 +129,6 @@ namespace ITCommunityCRM.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -199,6 +153,9 @@ namespace ITCommunityCRM.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telegram")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -359,17 +316,6 @@ namespace ITCommunityCRM.Data.Migrations
                 });
 
             modelBuilder.Entity("ITCommunityCRM.Data.Models.Event", b =>
-                {
-                    b.HasOne("ITCommunityCRM.Data.Models.NotificationTemplate", "NotificationTemplate")
-                        .WithMany()
-                        .HasForeignKey("NotificationTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("NotificationTemplate");
-                });
-
-            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationTemplate", b =>
                 {
                     b.HasOne("ITCommunityCRM.Data.Models.NotificationType", "NotificationType")
                         .WithMany()

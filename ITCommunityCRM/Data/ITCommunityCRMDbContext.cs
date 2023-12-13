@@ -1,5 +1,4 @@
-﻿using ITCommunityCRM.Models;
-using ITCommunityCRM.Data.Models;
+﻿using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +9,8 @@ namespace ITCommunityCRM.Data
     {
         public DbSet<Event> Events { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
-
-
-        public DbSet<NotificationMessageTemplate> NotificationMessageTemplates { get; set; }
+        public DbSet<NotificationTemplate> NotificationMessageTemplates { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
 
         public ITCommunityCRMDbContext(DbContextOptions<ITCommunityCRMDbContext> options)
@@ -25,7 +23,8 @@ namespace ITCommunityCRM.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<NotificationType>().HasData(
+            modelBuilder.Entity<NotificationType>()
+            .HasData(
             new NotificationType[]
             {
                 new NotificationType { Id = 1, Type = NotificationTypeConst.All},
@@ -33,11 +32,14 @@ namespace ITCommunityCRM.Data
                 new NotificationType { Id = 3, Type = NotificationTypeConst.Telegram},
             });
 
-            modelBuilder.Entity<NotificationMessageTemplate>().HasData(
-            new NotificationMessageTemplate[]
+            modelBuilder.Entity<NotificationTemplate>()
+            .HasData(
+            new NotificationTemplate[]
             {
-                new NotificationMessageTemplate { Id = 1, MessageTemplate = "Hi", Title = "Title"},
+                new NotificationTemplate { Id = 1, MessageTemplate = "Hi", Title = "Title", NotificationTypeId = 3},
             });
+
+
         }
     }
 }
