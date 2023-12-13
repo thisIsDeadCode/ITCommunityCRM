@@ -21,10 +21,10 @@
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-23">
-                    <label asp-for="Input.Telegram" class="label-input100">Telegram (if you need notices)</label>
-                    <input asp-for="Input.Telegram" class="input100" aria-required="true" placeholder="username"/>
+                    <label asp-for="Input.FirstName" class="label-input100">Telegram (if you need notices)</label>
+                    <input asp-for="Input.FirstName" class="input100" aria-required="true" placeholder="username"/>
                     <span class="focus-input100" data-symbol="&#xf1d9;"></span>
-                    <span asp-validation-for="Input.Telegram" class="text-danger"></span>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-23">
@@ -54,7 +54,7 @@
                     </span>
 
                     <div class="flex-c-m">
-                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="ITCommunityCRM_BOT" data-size="medium" data-auth-url="https://igubanov.bsite.net/ExternalAuthorization/TelegramLogin" data-request-access="write"></script>
+                        <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="@Model.TelegramLogin" data-size="medium" data-auth-url="@Model.AuthUrl" data-request-access="write"></script>
                     </div>
                 </div>
 

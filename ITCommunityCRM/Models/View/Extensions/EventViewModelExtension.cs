@@ -10,7 +10,11 @@ namespace ITCommunityCRM.Models.View.Extensions
             return new Event()
             {
                 Name = createEventViewModel.Name,
-                NotificationTypeId = createEventViewModel.NotificationTypeId,
+                Description = createEventViewModel.Description,
+                StartDate = createEventViewModel.StartDate,
+                EndDate = createEventViewModel.EndDate,
+                CreatedDate = DateTime.Now,
+                NotificationMessageTemplateId = createEventViewModel.NotificationMessageTemplateId
             };
         }
 
@@ -20,7 +24,11 @@ namespace ITCommunityCRM.Models.View.Extensions
             {
                 Id = editEventViewModel.Id,
                 Name = editEventViewModel.Name,
-                NotificationTypeId = editEventViewModel.NotificationTypeId,
+                Description = editEventViewModel.Description,
+                StartDate = editEventViewModel.StartDate,
+                EndDate = editEventViewModel.EndDate,
+                CreatedDate = DateTime.Now,
+                NotificationMessageTemplateId = editEventViewModel.NotificationMessageTemplateId
             };
         }
 
@@ -30,7 +38,10 @@ namespace ITCommunityCRM.Models.View.Extensions
             {
                 Id = e.Id,
                 Name = e.Name,
-                NotificationTypeId = e.NotificationTypeId,
+                Description = e.Description,
+                EndDate = e.EndDate,
+                StartDate = e.StartDate,
+                NotificationMessageTemplateId = e.NotificationMessageTemplateId,
             };
         }
     }

@@ -2,8 +2,7 @@
 {
     public class AppSettings
     {
-        public string TelegramToken { get; set; }
-        public string TelegramBotName { get; set; }
-        public string Host { get; set; }
+        public string DomainLink {  get; set; }
+        public string TelegramToken {  get; set; }
     }
 }

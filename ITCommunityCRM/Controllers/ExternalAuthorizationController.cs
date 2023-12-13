@@ -1,4 +1,5 @@
-﻿using ITCommunityCRM.Data.Models.Consts;
+﻿using ITCommunityCRM.Data.Models;
+using ITCommunityCRM.Data.Models.Consts;
 using ITCommunityCRM.Models;
 using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +46,7 @@ namespace ITCommunityCRM.Controllers
                 var user_tel = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
                 if (user_tel == null)
                 {
-                    user_tel = new User(username ?? first_name) { Telegram = null};
+                    user_tel = new User(username, first_name);
                     await _userManager.CreateAsync(user_tel);
                 }
                 await _userManager.AddLoginAsync(user_tel, info);
@@ -66,7 +67,6 @@ namespace ITCommunityCRM.Controllers
 
             byte[] HashHmac(byte[] key, byte[] message)
             {
-
                 var hash = new HMACSHA256(key);
                 return hash.ComputeHash(message);
             }

@@ -6,7 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using ITCommunityCRM.Models;
+using ITCommunityCRM.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -52,8 +52,8 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            [Display(Name = "Telegram username")]
-            public string Telegram { get; set; }
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
         }
 
         private async Task LoadAsync(User user)
@@ -64,7 +64,7 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                Telegram = user.Telegram
+                FirstName = user.FirstName
             };
         }
 
@@ -94,9 +94,9 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
             
-            if (Input.Telegram != user.Telegram)
+            if (Input.FirstName != user.FirstName)
             {
-                user.Telegram = Input.Telegram;
+                user.FirstName = Input.FirstName;
                 var setTelegramResult = await _userManager.UpdateAsync(user);
                 if (!setTelegramResult.Succeeded)
                 {
