@@ -14,7 +14,7 @@ namespace ITCommunityCRM.Models.View.Extensions
                 StartDate = createEventViewModel.StartDate,
                 EndDate = createEventViewModel.EndDate,
                 CreatedDate = DateTime.Now,
-                NotificationMessageTemplateId = createEventViewModel.NotificationMessageTemplateId
+                NotificationTemplateId = createEventViewModel.NotificationMessageTemplateId
             };
         }
 
@@ -28,7 +28,7 @@ namespace ITCommunityCRM.Models.View.Extensions
                 StartDate = editEventViewModel.StartDate,
                 EndDate = editEventViewModel.EndDate,
                 CreatedDate = DateTime.Now,
-                NotificationMessageTemplateId = editEventViewModel.NotificationMessageTemplateId
+                NotificationTemplateId = editEventViewModel.NotificationMessageTemplateId
             };
         }
 
@@ -41,7 +41,7 @@ namespace ITCommunityCRM.Models.View.Extensions
                 Description = e.Description,
                 EndDate = e.EndDate,
                 StartDate = e.StartDate,
-                NotificationMessageTemplateId = e.NotificationMessageTemplateId,
+                NotificationMessageTemplateId = e.NotificationTemplateId,
             };
         }
     }
