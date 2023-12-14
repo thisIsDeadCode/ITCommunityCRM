@@ -1,5 +1,6 @@
 ﻿using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
+using ITCommunityCRM.Models;
 using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,15 +29,14 @@ namespace ITCommunityCRM.Controllers
         }
 
         public async Task<IActionResult> TelegramLogin(
-            string id, 
+            string id,
             string first_name,
             string username,
-            string auth_date,
             string hash)
         {
             var secretKey = ShaHash(_appSettings.TelegramToken);
 
-            var myHash = HashHmac(secretKey, Encoding.UTF8.GetBytes(InputsToString(id, first_name, username, auth_date)));
+            var myHash = HashHmac(secretKey, Encoding.UTF8.GetBytes(BuildKeyString()));
 
             var myHashStr = String.Concat(myHash.Select(i => i.ToString("x2")));
             var providerKey = id;
@@ -54,7 +54,7 @@ namespace ITCommunityCRM.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            return RedirectToAction("Login", "Account");
+            return Redirect("/Identity/Account/Login");
 
 
 
@@ -72,34 +72,12 @@ namespace ITCommunityCRM.Controllers
             }
 
 
-            string InputsToString(
-                string id,
-                string first_name,
-                string username,
-                string auth_date)
+            string BuildKeyString()
             {
-                StringBuilder dataStringBuilder = new StringBuilder(256);
-
-                dataStringBuilder.Append("auth_date");
-                dataStringBuilder.Append('=');
-                dataStringBuilder.Append(auth_date);
-                dataStringBuilder.Append('\n');
-
-                dataStringBuilder.Append("first_name");
-                dataStringBuilder.Append('=');
-                dataStringBuilder.Append(first_name);
-                dataStringBuilder.Append('\n');
-
-                dataStringBuilder.Append("id");
-                dataStringBuilder.Append('=');
-                dataStringBuilder.Append(id);
-                dataStringBuilder.Append('\n');
-
-                dataStringBuilder.Append("username");
-                dataStringBuilder.Append('=');
-                dataStringBuilder.Append(username);
-
-                return dataStringBuilder.ToString();
+                return string.Join("\n", HttpContext.Request.Query
+                    .Where(x => !string.Equals(x.Key, "hash", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(x => x.Key)
+                    .Select(x => $"{x.Key}={x.Value}"));       
             }
         }
     }
