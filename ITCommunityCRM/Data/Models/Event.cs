@@ -9,6 +9,9 @@
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public int? TagId { get; set; }
+        public Tag? Tag { get; set; }
+
         public int NotificationMessageTemplateId { get; set; }
         public NotificationTemplate NotificationTemplate { get; set; }
     }

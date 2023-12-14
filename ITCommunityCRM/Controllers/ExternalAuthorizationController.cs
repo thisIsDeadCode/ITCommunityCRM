@@ -1,6 +1,5 @@
 ﻿using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
-using ITCommunityCRM.Models;
 using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

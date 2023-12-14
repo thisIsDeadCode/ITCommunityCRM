@@ -1,5 +1,4 @@
 ﻿using ITCommunityCRM.Data;
-using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
 using Microsoft.EntityFrameworkCore;
 
