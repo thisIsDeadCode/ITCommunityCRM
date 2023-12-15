@@ -43,7 +43,7 @@ builder.Services.AddScoped<ReceiverService>();
 builder.Services.AddHostedService<PollingService>();
 
 var app = builder.Build();
-
+UpdateDatabase<ITCommunityCRMDbContext>(app);
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
@@ -69,3 +69,14 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+static void UpdateDatabase<T>(IApplicationBuilder app)
+    where T : DbContext
+{
+    using (var scope = app.ApplicationServices.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<T>().Database;
+        db.SetCommandTimeout(160);
+        db.Migrate();
+    }
+}
