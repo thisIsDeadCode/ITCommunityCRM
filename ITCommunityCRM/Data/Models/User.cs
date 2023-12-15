@@ -12,4 +12,8 @@ public class User : IdentityUser
     {
         FirstName = firstName;
     }
+
+    public User()
+    {
+    }
 }
