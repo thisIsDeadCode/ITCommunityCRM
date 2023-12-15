@@ -1,9 +1,8 @@
 using ITCommunityCRM.Data;
+using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Models.Configuration;
-using ITCommunityCRM.Models;
 using ITCommunityCRM.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using ITCommunityCRM.Services.Bot;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
@@ -21,7 +20,9 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<ITCommunityCRMDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
+builder.Services.Configure<TelegramWidgetSettings>(builder.Configuration.GetSection(nameof(TelegramWidgetSettings)));
+builder.Services.Configure<EmailNotificationSettings>(builder.Configuration.GetSection(nameof(EmailNotificationSettings)));
 
 builder.Services.AddHttpClient("telegram_bot_client")
                 .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
@@ -32,8 +33,14 @@ builder.Services.AddHttpClient("telegram_bot_client")
                 });
 
 
+builder.Services.AddTransient<EmailNotification>();
 builder.Services.AddTransient<NotificationService>();
 builder.Services.AddTransient<TelegramNotification>();
+builder.Services.AddTransient<TemplateServise>();
+
+builder.Services.AddScoped<UpdateHandler>();
+builder.Services.AddScoped<ReceiverService>();
+builder.Services.AddHostedService<PollingService>();
 
 var app = builder.Build();
 

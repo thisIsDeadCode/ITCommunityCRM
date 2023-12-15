@@ -17,7 +17,7 @@ namespace ITCommunityCRM.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,21 +30,174 @@ namespace ITCommunityCRM.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NotificationTypeId")
+                    b.Property<int>("NotificationTemplateId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NotificationTypeId");
+                    b.HasIndex("NotificationTemplateId");
 
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationMessageTemplate", b =>
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("EventGroup");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventSpeaker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpeakerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("SpeakerId");
+
+                    b.ToTable("EventSpeaker");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventTag");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventUser");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("GroupIdCode")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.GroupTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("GroupTag");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,11 +209,16 @@ namespace ITCommunityCRM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NotificationTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NotificationTypeId");
 
                     b.ToTable("NotificationMessageTemplates");
 
@@ -69,6 +227,7 @@ namespace ITCommunityCRM.Data.Migrations
                         {
                             Id = 1,
                             MessageTemplate = "Hi",
+                            NotificationTypeId = 3,
                             Title = "Title"
                         });
                 });
@@ -107,7 +266,145 @@ namespace ITCommunityCRM.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ITCommunityCRM.Models.User", b =>
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Speaker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Speakers");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.SpeakerTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SpeakerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpeakerId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("SpeakerTag");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = ".Net"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = ".C#"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Java"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "JS"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "TS"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Angular"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Vue"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "React"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Pyton"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "HR"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Crypto"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Security"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Vacancies"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Flood"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "etc"
+                        });
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -125,6 +422,10 @@ namespace ITCommunityCRM.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -152,9 +453,6 @@ namespace ITCommunityCRM.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Telegram")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -173,6 +471,30 @@ namespace ITCommunityCRM.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.UserTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -314,6 +636,112 @@ namespace ITCommunityCRM.Data.Migrations
 
             modelBuilder.Entity("ITCommunityCRM.Data.Models.Event", b =>
                 {
+                    b.HasOne("ITCommunityCRM.Data.Models.NotificationTemplate", "NotificationTemplate")
+                        .WithMany()
+                        .HasForeignKey("NotificationTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NotificationTemplate");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventGroup", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Event", "Event")
+                        .WithMany("EventGroups")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventSpeaker", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Event", "Event")
+                        .WithMany("EventSpeakers")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.Speaker", "Speaker")
+                        .WithMany("EventSpeakers")
+                        .HasForeignKey("SpeakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Speaker");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventTag", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Event", "Event")
+                        .WithMany("EventTags")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.EventUser", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Event", "Event")
+                        .WithMany("EventUsers")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.GroupTag", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Group", "Group")
+                        .WithMany("GroupTags")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.NotificationTemplate", b =>
+                {
                     b.HasOne("ITCommunityCRM.Data.Models.NotificationType", "NotificationType")
                         .WithMany()
                         .HasForeignKey("NotificationTypeId")
@@ -321,6 +749,44 @@ namespace ITCommunityCRM.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("NotificationType");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.SpeakerTag", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Speaker", "Speaker")
+                        .WithMany("SpeakerTags")
+                        .HasForeignKey("SpeakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Speaker");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.UserTag", b =>
+                {
+                    b.HasOne("ITCommunityCRM.Data.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ITCommunityCRM.Data.Models.User", "User")
+                        .WithMany("UserTags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -334,7 +800,7 @@ namespace ITCommunityCRM.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ITCommunityCRM.Models.User", null)
+                    b.HasOne("ITCommunityCRM.Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -343,7 +809,7 @@ namespace ITCommunityCRM.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ITCommunityCRM.Models.User", null)
+                    b.HasOne("ITCommunityCRM.Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -358,7 +824,7 @@ namespace ITCommunityCRM.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITCommunityCRM.Models.User", null)
+                    b.HasOne("ITCommunityCRM.Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -367,11 +833,39 @@ namespace ITCommunityCRM.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ITCommunityCRM.Models.User", null)
+                    b.HasOne("ITCommunityCRM.Data.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Event", b =>
+                {
+                    b.Navigation("EventGroups");
+
+                    b.Navigation("EventSpeakers");
+
+                    b.Navigation("EventTags");
+
+                    b.Navigation("EventUsers");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Group", b =>
+                {
+                    b.Navigation("GroupTags");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.Speaker", b =>
+                {
+                    b.Navigation("EventSpeakers");
+
+                    b.Navigation("SpeakerTags");
+                });
+
+            modelBuilder.Entity("ITCommunityCRM.Data.Models.User", b =>
+                {
+                    b.Navigation("UserTags");
                 });
 #pragma warning restore 612, 618
         }

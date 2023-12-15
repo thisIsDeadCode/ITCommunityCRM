@@ -1,5 +1,4 @@
 ﻿using ITCommunityCRM.Data;
-using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,28 +7,36 @@ namespace ITCommunityCRM.Services
     public class NotificationService
     {
         private readonly ITCommunityCRMDbContext _context;
-        private TelegramNotification _telegramNotification;
+        private readonly TelegramNotification _telegramNotification;
+        private readonly EmailNotification _emailNotification;
 
-        public NotificationService(TelegramNotification telegramNotification, ITCommunityCRMDbContext context)
+        public NotificationService(TelegramNotification telegramNotification, ITCommunityCRMDbContext context,
+            EmailNotification emailNotification)
         {
             _telegramNotification = telegramNotification;
             _context = context;
+            _emailNotification = emailNotification;
         }
 
         public async Task NotificateAsync(int eventId)
         {
             var e = await _context.Events
-                .Include(x => x.NotificationType)
+                .Include(x => x.NotificationTemplate)
                 .FirstOrDefaultAsync(x => x.Id == eventId);
 
-            switch (e.NotificationType.Type)
+            switch (e.NotificationTemplate.NotificationType.Type)
             {
                 case NotificationTypeConst.All:
                 {
+                    await _emailNotification.NotificateAsync(e);
                     await _telegramNotification.NotificateAsync(e);
                     break;
                 }
-                case NotificationTypeConst.Email: break;
+                case NotificationTypeConst.Email:
+                {
+                    await _emailNotification.NotificateAsync(e);
+                    break;
+                }
                 case NotificationTypeConst.Telegram: 
                 {
                     await _telegramNotification.NotificateAsync(e);

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using ITCommunityCRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using ITCommunityCRM.Data.Models;
+using Microsoft.Extensions.Options;
+using ITCommunityCRM.Models.Configuration;
 
 namespace ITCommunityCRM.Areas.Identity.Pages.Account
 {
@@ -22,11 +24,14 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly TelegramWidgetSettings _telegramWidgetSettings;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, 
+            IOptions<TelegramWidgetSettings> telegramWidgetSettings)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _telegramWidgetSettings = telegramWidgetSettings.Value;
         }
 
         /// <summary>
@@ -47,6 +52,11 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
+
+        public string TelegramLogin { get; set; }
+
+        public string AuthUrl { get; set; }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -100,6 +110,9 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            TelegramLogin = _telegramWidgetSettings.TelegramLogin;
+            AuthUrl = _telegramWidgetSettings.AuthUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -107,6 +120,9 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            TelegramLogin = _telegramWidgetSettings.TelegramLogin;
+            AuthUrl = _telegramWidgetSettings.AuthUrl;
 
             if (ModelState.IsValid)
             {

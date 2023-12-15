@@ -11,7 +11,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using ITCommunityCRM.Models;
+using ITCommunityCRM.Data.Models;
+using ITCommunityCRM.Models.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ITCommunityCRM.Areas.Identity.Pages.Account
 {
@@ -31,13 +33,15 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly TelegramWidgetSettings _telegramWidgetSettings;
 
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<TelegramWidgetSettings> telegramWidgetSettings)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +49,7 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _telegramWidgetSettings = telegramWidgetSettings.Value;
         }
 
         /// <summary>
@@ -59,6 +64,11 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
+
+        public string TelegramLogin { get; set; }
+
+        public string AuthUrl { get; set; }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -81,8 +91,8 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
             
-            [Display(Name = "Telegram Username")]
-            public string Telegram { get; set; }
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -110,16 +120,21 @@ namespace ITCommunityCRM.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            TelegramLogin = _telegramWidgetSettings.TelegramLogin;
+            AuthUrl = _telegramWidgetSettings.AuthUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            TelegramLogin = _telegramWidgetSettings.TelegramLogin;
+            AuthUrl = _telegramWidgetSettings.AuthUrl;
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                user.Telegram = Input.Telegram;
+                user.FirstName = Input.FirstName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
