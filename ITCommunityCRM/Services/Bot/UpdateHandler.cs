@@ -1,14 +1,20 @@
 ﻿using ITCommunityCRM.Data;
 using ITCommunityCRM.Data.Models;
+using ITCommunityCRM.Data.Models.Consts;
 using MailKit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using Message = Telegram.Bot.Types.Message;
+using User = ITCommunityCRM.Data.Models.User;
 
 namespace ITCommunityCRM.Services.Bot
 {
@@ -16,11 +22,14 @@ namespace ITCommunityCRM.Services.Bot
     {
         private const string HELLO_MESSAGE = "Привет, дорогой друг. Добро пожаловать в наше сообщество.";
         private const string WRONG_EVENT_ID = "Информация о событии не найдена";
+        private const string RESIGTER_BUTTON_TEXT = "Участвовать";
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<UpdateHandler> _logger;
         private readonly ITCommunityCRMDbContext _context;
 
-        public UpdateHandler(ILogger<UpdateHandler> logger, ITCommunityCRMDbContext context)
+        public UpdateHandler(UserManager<User> userManager, ILogger<UpdateHandler> logger, ITCommunityCRMDbContext context)
         {
+            _userManager = userManager;
             _logger = logger;
             _context = context;
         }
@@ -45,6 +54,7 @@ namespace ITCommunityCRM.Services.Bot
             }
 
             await TryCreateGroupAsync(message, cancellationToken);
+            var user = await TryCreateUser(message.From);
             await SendResponseToStartCommand(bot, message, cancellationToken);
         }
 
@@ -60,7 +70,6 @@ namespace ITCommunityCRM.Services.Bot
                 return;
             }
 
-
             var eventInfo = int.TryParse(messageParts[1], out var eventIdFromMessage)
                 ? await _context.Events.FirstOrDefaultAsync(x => x.Id == eventIdFromMessage, cancellationToken)
                 : null;
@@ -73,13 +82,50 @@ namespace ITCommunityCRM.Services.Bot
             }
 
             _logger.LogInformation("Find event, sending information to user");
-            await bot.SendTextMessageAsync(chatId, GetMessageFromEvent(eventInfo), cancellationToken: cancellationToken);
-
+            await SendEventInvitation(bot, chatId, eventInfo, cancellationToken);
         }
 
-        private string GetMessageFromEvent(Event @event)
+        // TODO: should be move to another place, duplicate with externalauth controller
+        private async Task<User> TryCreateUser(Telegram.Bot.Types.User? from)
         {
-            return $"{@event.Name}\r\n{@event.Description}";
+            if (from == null)
+            {
+                throw new InvalidDataException("Empty author message");
+            }
+
+            var userId = from.Id.ToString();
+            var username = from.Username ?? Guid.NewGuid().ToString();
+            var first_name = from.FirstName;
+            var info = new UserLoginInfo(UserLoginInfoConst.TelegramLoginProvider, userId, UserLoginInfoConst.TelegramLoginProvider);
+            var telegramUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if (telegramUser == null)
+            {
+                if (string.IsNullOrEmpty(username))
+                {
+                    telegramUser = new User(new Guid().ToString(), first_name);
+                }
+                else
+                {
+                    telegramUser = new User(username, first_name);
+                }
+                await _userManager.CreateAsync(telegramUser);
+            }
+
+            await _userManager.AddLoginAsync(telegramUser, info);
+
+            return telegramUser;
+        }
+
+        // TODO: need change button when already added to event
+        private async Task SendEventInvitation(ITelegramBotClient bot, long chatId, Event @event, CancellationToken cancellationToken)
+        {
+            var eventInformation = $"{@event.Name}\r\n{@event.Description}";
+            var registerToEventButton = new InlineKeyboardButton(RESIGTER_BUTTON_TEXT) { CallbackData = @event.Id.ToString() }; //{ Url = "https://google.com"};
+            await bot.SendTextMessageAsync(
+                chatId, 
+                eventInformation,
+                replyMarkup: new InlineKeyboardMarkup(registerToEventButton),
+                cancellationToken: cancellationToken);
         }
 
         // ?? it can be private a chat an user with the bot
