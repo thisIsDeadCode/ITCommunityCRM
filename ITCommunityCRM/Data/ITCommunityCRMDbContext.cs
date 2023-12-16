@@ -7,6 +7,7 @@ namespace ITCommunityCRM.Data
 {
     public class ITCommunityCRMDbContext : IdentityDbContext<User>
     {
+        public DbSet<User> Users { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
         public DbSet<NotificationTemplate> NotificationMessageTemplates { get; set; }

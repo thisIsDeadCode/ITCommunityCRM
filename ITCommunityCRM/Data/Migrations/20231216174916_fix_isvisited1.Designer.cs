@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITCommunityCRM.Data.Migrations
 {
     [DbContext(typeof(ITCommunityCRMDbContext))]
-    [Migration("20231216162849_Addflagtotrackusereventvisit")]
-    partial class Addflagtotrackusereventvisit
+    [Migration("20231216174916_fix_isvisited1")]
+    partial class fix_isvisited1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -234,7 +234,7 @@ namespace ITCommunityCRM.Data.Migrations
                             Id = 1,
                             MessageTemplate = "Hi",
                             NotificationTypeId = 3,
-                            Title = "Title"
+                            Title = "NotificationTemplateTitle"
                         });
                 });
 
@@ -719,7 +719,7 @@ namespace ITCommunityCRM.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("ITCommunityCRM.Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("EventUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -873,6 +873,8 @@ namespace ITCommunityCRM.Data.Migrations
 
             modelBuilder.Entity("ITCommunityCRM.Data.Models.User", b =>
                 {
+                    b.Navigation("EventUsers");
+
                     b.Navigation("UserTags");
                 });
 #pragma warning restore 612, 618

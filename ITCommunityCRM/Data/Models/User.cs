@@ -9,6 +9,7 @@ public class User : IdentityUser
 
 
     public List<UserTag>? UserTags { get; set; }
+    public List<EventUser>? EventUsers { get; set; }
 
     public User(string userName, string firstName) : base(userName)
     {

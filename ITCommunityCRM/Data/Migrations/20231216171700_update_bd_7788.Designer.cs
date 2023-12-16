@@ -4,6 +4,7 @@ using ITCommunityCRM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITCommunityCRM.Data.Migrations
 {
     [DbContext(typeof(ITCommunityCRMDbContext))]
-    partial class ITCommunityCRMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216171700_update_bd_7788")]
+    partial class update_bd_7788
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
