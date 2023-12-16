@@ -1,35 +1,159 @@
-﻿@model IEnumerable<ITCommunityCRM.Data.Models.Event>
-
+﻿@using ITCommunityCRM.Data.Models
+@model IEnumerable<Event>
 @{
     ViewData["Title"] = "Index";
+    
 }
 
-<h1>Index</h1>
+<link href="~/libs/font-awesome/css/all.min.css" rel="stylesheet" />
+<link href="~/libs/admin-lte/dist/css/adminlte.min.css" rel="stylesheet" />
+<h1>Menu Event</h1>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>Event</h1>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn bg-green float-sm-right" data-bs-toggle="modal" data-bs-target="#Create">
+                    <i class="fa fa-plus-square"></i>
+                    Create
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="abp-advanced-search">                                   
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn bg-blue btn-search">
+                                                    <span class="fas fa-search" aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                            <input type="text" id="filter" name="Keyword" class="form-control txt-search" />
+                                        </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="UsersTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Notificate type</th>
+                                        <th>Time start</th>
+                                        <th>Time finish</th>                                        
+                                        <th style="width: 150px">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="searchable" id="tBody">
+                                    @foreach (Event ev in Model)
+                                    {
+                                        <tr>
+                                            <th class="infoTh">@ev.Name</th>
+                                            <th class="infoTh" data-name="@ev.NotificationTemplateId">
+                                                @ev.NotificationTemplate.Title
+                                            </th>
+                                            <th class="infoTh" data-name="@ev.StartDate">
+                                                @ev.StartDate.Date
+                                            </th>
+                                            <th class="infoTh" data-name="@ev.EndDate">
+                                                @ev.EndDate.Date
+                                            </th>
+                                            <th class="infoTh" data-name="@ev.Description">
+                                                @ev.Description
+                                            </th>
+                                            <th class="infoTh d-flex" style="width: 150px" data-name="@ev.Id">
+                                                <button id="btnEdit" data-bs-toggle="modal" data-bs-target="#Edit" class="btn btn-sm bg-yellow edit-user">Edit </button>
+                                                <form asp-action="Delete">
+                                                    <input class="text-hide" name="Id" value="@ev.Id" />
+                                                    <button class="btn btn-sm bg-danger delete-user">delete</button>
+                                                </form>                                                
+                                            </th>
+                                        </tr>
+                                    }                                 
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex px-3">
+                        <div class="col-lg-3 col-xs-12">
+
+                            <a href="Events" class="btn btn-secondary">
+                                <span>
+                                    <i class="fas fa-redo-alt">
+
+                                    </i>                                    
+                                </span>
+                            </a>
+                            
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="text-center">
+                                items
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="text-center">
+                                <div class="dataTables_length">
+                                    <label for="" class="d-flex">
+                                        show
+                                        <select name="" id="currentMaxPage" class="custom-select custom-select-sm form-control form-control-sm w-25 ml-2 mr-2">
+                                            <option value=15>15</option>
+                                            <option value=25>25</option>
+                                            <option value=50>50</option>
+                                            <option value=100>100</option>
+                                        </select>
+                                        entries
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3 col-xs-12">
+                            <div class="float-right">
+                                <div class="dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination">
+                                        <li id="back" class="paginate_button page-item previous disabled">
+                                            <a href="" class="page-link">
+                                                <i class="fas fa-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="paginate_button page-item active">
+                                            <a id="pageNum" href="#" class="page-link">1</a>
+                                        </li>
+                                        <li id="next" class="paginate_button page-item previous disabled">
+                                            <a href="" class="page-link">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@await Html.PartialAsync("Create.cshtml")
+@await Html.PartialAsync("Edit.cshtml")
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/IndexEvents.js" asp-append-version="true"></script>
+<script src="~/js/validateEvent.js" asp-append-version="true"></script>
