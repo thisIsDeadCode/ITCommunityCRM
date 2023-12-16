@@ -42,14 +42,21 @@ namespace ITCommunityCRM.Controllers
             if (myHashStr == hash)
             {
                 var info = new UserLoginInfo(UserLoginInfoConst.TelegramLoginProvider, providerKey, UserLoginInfoConst.TelegramLoginProvider);
-                var user_tel = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-                if (user_tel == null)
+                var telegramUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+                if (telegramUser == null)
                 {
-                    user_tel = new User(username, first_name);
-                    await _userManager.CreateAsync(user_tel);
+                    if (string.IsNullOrEmpty(username))
+                    {
+                        telegramUser = new User(new Guid().ToString(), first_name);
+                    }
+                    else
+                    {
+                        telegramUser = new User(username, first_name);
+                    }
+                    await _userManager.CreateAsync(telegramUser);
                 }
-                await _userManager.AddLoginAsync(user_tel, info);
-                await _signInManager.SignInAsync(user_tel, true);
+                await _userManager.AddLoginAsync(telegramUser, info);
+                await _signInManager.SignInAsync(telegramUser, true);
                 return RedirectToAction("Index", "Home");
 
             }

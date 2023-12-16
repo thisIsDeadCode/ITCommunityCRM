@@ -1,39 +1,55 @@
-﻿@model ITCommunityCRM.Models.View.Events.EditEventViewModel
+﻿
+<form asp-action="Edit" class="needs-validation-create" novalidate>
+    <div class="modal fade" id="Edit" tabindex="-1" aria-labelledby="Create" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <input name ="Id" id="editId" class="invisible"/>
+                </div>
 
-@{
-    ViewData["Title"] = "Edit";
-}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Name</label>
+                        <input name="Name" class="form-control" id="editName" required />                        
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">Description</label>
+                        <textarea name=Description class="form-control" id="editDescription" rows="3" required></textarea>
+                        
+                    </div>
+                    <div class="mb-3 d-flex">
+                        <div class="text-center">
+                            <label for="StartDate">Begin event</label>
+                            <input type="datetime-local" class="input mx-2" name="StartDate" id="editStart" required>
+                            <div class="invalid-feedback">
+                                Please chose date start of event
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <label for="EndDate">Finish event</label>
+                            <input type="datetime-local" class="input mx-2" name="EndDate" id="editEnd" required>
+                            <div class="invalid-feedback">
+                                Please chose date finish of event
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <label for="NotificationMessageTemplateId" class="form-label"></label>
+                        <select name="NotificationMessageTemplateId" id="editSelect"  class="form-control" asp-items="ViewBag.NotificationMessageTemplateId"></select>
+                        <div class="invalid-feedback">
+                            Please chose notificationtype
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn bg-yellow">Edit</button>
+                </div>
 
-<h1>Edit</h1>
-
-<h4>Event</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NotificationMessageTemplateId" class="control-label"></label>
-                <select asp-for="NotificationMessageTemplateId" class="form-control" asp-items="ViewBag.NotificationTypeId"></select>
-                <span asp-validation-for="NotificationMessageTemplateId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

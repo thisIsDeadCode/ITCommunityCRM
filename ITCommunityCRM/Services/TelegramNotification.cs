@@ -26,7 +26,8 @@ namespace ITCommunityCRM.Services
                 .Where(x => x.LoginProvider == UserLoginInfoConst.TelegramLoginProvider).ToList();
             var template = e.NotificationTemplate.MessageTemplate;
 
-            foreach (var tgUser in tgUsers) {
+            foreach (var tgUser in tgUsers)
+            {
                 //_templateServise.GetMessage(); TODO
                 await _telegramBotClient.SendTextMessageAsync(tgUser.ProviderKey, template);
             }

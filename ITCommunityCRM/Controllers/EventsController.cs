@@ -25,6 +25,8 @@ namespace ITCommunityCRM.Controllers
             var iTCommunityCRMDbContext = _context.Events
                 .Include(x => x.NotificationTemplate)
                 .ThenInclude(x => x.NotificationType);
+            ViewBag.NotificationMessageTemplateId = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
+            
             return View(await iTCommunityCRMDbContext.ToListAsync());
         }
 
@@ -72,7 +74,7 @@ namespace ITCommunityCRM.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
-            return View(xevent);
+            return RedirectToAction("Index");
         }
 
         // GET: Events/Edit/5
