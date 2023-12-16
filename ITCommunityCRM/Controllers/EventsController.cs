@@ -3,6 +3,7 @@ using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Models.View.Events;
 using ITCommunityCRM.Models.View.Extensions;
 using ITCommunityCRM.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace ITCommunityCRM.Controllers
 
         // GET: Events
         public async Task<IActionResult> Index()
-        {
+        {           
             var iTCommunityCRMDbContext = _context.Events
                 .Include(x => x.NotificationTemplate)
                 .ThenInclude(x => x.NotificationType);
@@ -201,7 +202,7 @@ namespace ITCommunityCRM.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["NotificationMessageTemplateId"] = new SelectList(_context.NotificationMessageTemplates, "Id", "Title");
-            return View(xevent);
+            return RedirectToAction("Index");
         }
 
         // GET: Events/Delete/5

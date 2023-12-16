@@ -23,10 +23,9 @@ btnsEdit.forEach((el)=>{
         document.getElementById('editName').value = nickName;
         document.getElementById('editId').value = id;
         document.getElementById('editSelect').value = type;
-        document.getElementById('editDescription').value = description;
-        document.getElementById('editStart').value = startTime;
-        document.getElementById('editEnd').value = endTime;
-        
+        document.getElementById('editDescription').value = description;       
+        $('#editStart').val(startTime);
+        $('#editEnd').val(endTime);
         
     })
 })
@@ -41,7 +40,7 @@ $(document).ready(function () {
         $('#filter').keyup(function () {
 
             var rex = new RegExp($(this).val(), 'i');
-            debugger
+            
             $('.searchable tr').hide();
             $('.searchable tr').filter(function () {
                 return rex.test($(this).text());
@@ -109,5 +108,10 @@ async function main(){
     }
 }
 main();
+$(document).ready(function () {
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    $('input[type=datetime-local]').val(now.toISOString().slice(0, 16));
+});
 
 

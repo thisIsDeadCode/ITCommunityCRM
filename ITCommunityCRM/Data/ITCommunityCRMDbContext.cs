@@ -1,5 +1,6 @@
 ﻿using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace ITCommunityCRM.Data
         public DbSet<Group> Groups { get; set; }
         public DbSet<Speaker> Speakers { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<IdentityRole> AspNetRoles { get; set; }
 
 
         public DbSet<EventUser> EventUsers { get; set; }
@@ -64,7 +66,22 @@ namespace ITCommunityCRM.Data
                 new Tag { Id = 13, Name = "Vacancies"},
                 new Tag { Id = 14, Name = "Flood"},
                 new Tag { Id = 15, Name = "etc"},
-            });
+            });            
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(
+                new IdentityRole[]
+                {
+                    new IdentityRole
+                    {
+                        Name = "User",
+                        NormalizedName="User"
+                    },
+                    new IdentityRole{
+                    
+                        Name="Admin",
+                        NormalizedName="Administrator"
+                    }
+                });
         }
     }
 }

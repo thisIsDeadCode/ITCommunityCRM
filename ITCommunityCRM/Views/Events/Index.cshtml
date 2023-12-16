@@ -7,6 +7,8 @@
 
 <link href="~/libs/font-awesome/css/all.min.css" rel="stylesheet" />
 <link href="~/libs/admin-lte/dist/css/adminlte.min.css" rel="stylesheet" />
+
+
 <h1>Menu Event</h1>
 <section class="content-header">
     <div class="container-fluid">
@@ -54,8 +56,10 @@
                                         <th>Name</th>
                                         <th>Notificate template</th>
                                         <th>Time start</th>
-                                        <th>Time finish</th>                                        
-                                        <th style="width: 300px">Actions</th>
+                                        <th>Time finish</th>
+                                        <th>Description</th>                                        
+                                        <th>Actions</th>
+
                                     </tr>
                                 </thead>
                                 <tbody class="searchable" id="tBody">
@@ -75,7 +79,7 @@
                                             <th class="infoTh" data-name="@ev.Description">
                                                 @ev.Description
                                             </th>
-                                            <th class="infoTh d-flex" style="width: 300px" data-name="@ev.Id">
+                                            <th class="infoTh d-flex" data-name="@ev.Id">
                                                 <form asp-action="TODO">
                                                     <input class="text-hide" name="Id" value="@ev.Id" />
                                                     <button class="btn bg-green float-sm-right">Создать рассылку</button>
@@ -167,3 +171,4 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/IndexEvents.js" asp-append-version="true"></script>
 <script src="~/js/validateEvent.js" asp-append-version="true"></script>
+
