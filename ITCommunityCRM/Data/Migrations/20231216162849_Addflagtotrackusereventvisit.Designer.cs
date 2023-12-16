@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITCommunityCRM.Data.Migrations
 {
     [DbContext(typeof(ITCommunityCRMDbContext))]
-    [Migration("20231216151453_Add flag to track user event visit")]
+    [Migration("20231216162849_Addflagtotrackusereventvisit")]
     partial class Addflagtotrackusereventvisit
     {
         /// <inheritdoc />
@@ -154,7 +154,7 @@ namespace ITCommunityCRM.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventUser");
+                    b.ToTable("EventUsers");
                 });
 
             modelBuilder.Entity("ITCommunityCRM.Data.Models.Group", b =>
@@ -430,8 +430,10 @@ namespace ITCommunityCRM.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAnonymousUser")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
