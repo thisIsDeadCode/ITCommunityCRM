@@ -15,6 +15,10 @@ namespace ITCommunityCRM.Data
         public DbSet<Tag> Tags { get; set; }
 
 
+        public DbSet<EventUser> EventUsers { get; set; }
+
+
+
         public ITCommunityCRMDbContext(DbContextOptions<ITCommunityCRMDbContext> options)
             : base(options)
         {
@@ -38,7 +42,7 @@ namespace ITCommunityCRM.Data
             .HasData(
             new NotificationTemplate[]
             {
-                new NotificationTemplate { Id = 1, MessageTemplate = "Hi", Title = "Title", NotificationTypeId = 3},
+                new NotificationTemplate { Id = 1, MessageTemplate = "Hi", Title = "NotificationTemplateTitle", NotificationTypeId = 3},
             });
 
             modelBuilder.Entity<Tag>()

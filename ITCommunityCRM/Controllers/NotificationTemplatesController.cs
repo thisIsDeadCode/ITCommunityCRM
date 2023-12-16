@@ -98,8 +98,8 @@ namespace ITCommunityCRM.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 try
                 {
                     _context.Update(notificationTemplate);
@@ -117,9 +117,9 @@ namespace ITCommunityCRM.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Id", notificationTemplate.NotificationTypeId);
-            return View(notificationTemplate);
+            //}
+            //ViewData["NotificationTypeId"] = new SelectList(_context.NotificationTypes, "Id", "Id", notificationTemplate.NotificationTypeId);
+            //return View(notificationTemplate);
         }
 
         // GET: NotificationTemplates/Delete/5

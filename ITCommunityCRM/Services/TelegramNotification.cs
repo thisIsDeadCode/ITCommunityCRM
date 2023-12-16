@@ -22,14 +22,20 @@ namespace ITCommunityCRM.Services
 
         public async Task NotificateAsync(Event e)
         {
-            var tgUsers = _context.UserLogins.Include(x => x.UserId)
-                .Where(x => x.LoginProvider == UserLoginInfoConst.TelegramLoginProvider).ToList();
+            var eventUsers = _context.EventUsers.Where(x => x.Id == e.Id);
+            var userLogins = _context.UserLogins;
+
             var template = e.NotificationTemplate.MessageTemplate;
 
-            foreach (var tgUser in tgUsers)
+
+            foreach (var userEvent in eventUsers)
             {
-                //_templateServise.GetMessage(); TODO
-                await _telegramBotClient.SendTextMessageAsync(tgUser.ProviderKey, template);
+                var tgUser = userLogins.FirstOrDefault(x => x.LoginProvider == UserLoginInfoConst.TelegramLoginProvider && x.UserId == userEvent.UserId);
+
+                if(tgUser != null)
+                {
+                    await _telegramBotClient.SendTextMessageAsync(tgUser.ProviderKey, template);
+                }
             }
         }
     }
