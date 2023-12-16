@@ -75,12 +75,13 @@
                                             <th class="infoTh" data-name="@ev.Description">
                                                 @ev.Description
                                             </th>
-                                            <th class="infoTh d-flex" style="width: 150px" data-name="@ev.Id">
+                                            <th class="infoTh d-flex" style="width: 225px; gap: 5px; height: 58px;" data-name="@ev.Id">
+                                                <a class="btn btn-primary" asp-area="" asp-controller="Events" asp-action="Details" asp-route-id="@ev.Id">Display</a>
                                                 <button id="btnEdit" data-bs-toggle="modal" data-bs-target="#Edit" class="btn btn-sm bg-yellow edit-user">Edit </button>
                                                 <form asp-action="Delete">
-                                                    <input class="text-hide" name="Id" value="@ev.Id" />
+                                                    <input class="text-hide" name="Id" value="@ev.Id"/>
                                                     <button class="btn btn-sm bg-danger delete-user">delete</button>
-                                                </form>                                                
+                                                </form>
                                             </th>
                                         </tr>
                                     }                                 
