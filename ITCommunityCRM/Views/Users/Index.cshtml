@@ -55,6 +55,7 @@
                                         <th>IsAnonymousUser</th>
                                         <th>EmailConfirmed</th>
                                         <th>UserName</th>
+                                        <th>LastEvent</th>
                                         <th>IsVisitedEvent</th>
                                     </tr>
                                 </thead>
@@ -71,6 +72,9 @@
                                             </th>
                                             <th class="infoTh" data-name="@eventUser.User.UserName">
                                                 @eventUser.User.UserName
+                                            </th>
+                                            <th class="infoTh" data-name=" @eventUser.Event.Name">
+                                                @eventUser.Event.Name
                                             </th>
                                             <th class="infoTh" data-name="@eventUser.IsVisitedEvent">
                                                 @eventUser.IsVisitedEvent

@@ -16,7 +16,9 @@ namespace ITCommunityCRM.Controllers
 
         public IActionResult Index()
         {
-            var users = _context.EventUsers.Include(x => x.User).ToList();
+            var users = _context.EventUsers
+                .Include(x => x.Event)
+                .Include(x => x.User).ToList();
             return View(users);
         }
     }
