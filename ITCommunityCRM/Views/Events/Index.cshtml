@@ -59,6 +59,7 @@
                                         <th>Time finish</th>
                                         <th>Description</th>                                        
                                         <th>Actions</th>
+
                                     </tr>
                                 </thead>
                                 <tbody class="searchable" id="tBody">
@@ -79,15 +80,24 @@
                                                 @ev.Description
                                             </th>
                                             <th class="infoTh d-flex" data-name="@ev.Id">
+                                                <form asp-action="TODO">
+                                                    <input class="text-hide" name="Id" value="@ev.Id" />
+                                                    <button class="btn bg-green float-sm-right">Создать рассылку</button>
+                                                </form>
+
+
                                                 <button id="btnEdit" data-bs-toggle="modal" data-bs-target="#Edit" class="btn btn-sm bg-yellow edit-user">Edit </button>
                                                 <form asp-action="Delete">
                                                     <input class="text-hide" name="Id" value="@ev.Id" />
                                                     <button class="btn btn-sm bg-danger delete-user">delete</button>
-                                                </form>                                                
+                                                </form>
+                                                <form asp-action="Details">
+                                                    <input class="text-hide" name="Id" value="@ev.Id" />
+                                                    <button class="btn bg-blue float-sm-right">Public event view</button>
+                                                </form>
                                             </th>
                                         </tr>
                                     }                                 
-
                                 </tbody>
                             </table>
                         </div>
@@ -154,6 +164,7 @@
         </div>
     </div>
 </section>
+
 @await Html.PartialAsync("Create.cshtml")
 @await Html.PartialAsync("Edit.cshtml")
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

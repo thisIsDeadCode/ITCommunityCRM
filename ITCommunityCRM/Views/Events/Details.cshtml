@@ -1,0 +1,82 @@
+﻿@* @model ITCommunityCRM.Data.Models.Event
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    Вадим где вьюха?
+    <h4>Group</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+    </dl>
+</div>
+
+<form asp-action="Registration">
+    <input class="text-hide" name="Id" value="@Model?.Id" />
+    <button type="submit" class="btn bg-green">Registration</button>
+</form>
+<div>
+    <a asp-action="Registration" asp-route-id="@Model?.Id">Registration as anon</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@
+
+        ﻿@{
+    ViewData["Title"] = "Event";
+}
+
+<div class="text-center">
+    <div class="event event__container col align-items-center" style="--tw-bg-opacity: 1; color:whitesmoke; background-color: rgb(35 35 35/var(--tw-bg-opacity));">
+        <div class="event__top row align-items-center" style="height: 100vh;">
+            <div class="event__title col">
+                <h1 class="mb-3" style="font-size: 50px">SCALA meetup!</h1>
+                <span class="badge bg-info text-dark" style="font-size: 30px">2017</span>
+            </div>
+            <div class="event__short-description col">
+                <h2 class="mb-2">Для SCALA разработчиков</h2>
+                <p class="badge bg-danger mb-2">Уже прошел</p>
+                <p class="mb-1" style="font-size: 22px; color: #b1b1b1;">Май 01-05</p>
+                <p style="font-size: 22px; color: #b1b1b1;">Минск онлайн/офлайн</p>
+            </div>
+        </div>
+        <div class="event__bottom">
+            <div class="event__full-description mb-4">
+                <h3 class="mb-3" style="text-align: start;">Про встречу SCALA:</h3>
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dictum interdum gravida. Sed venenatis nibh id quam ullamcorper dictum. Vivamus vitae eros dignissim, rutrum odio facilisis, blandit enim. Sed auctor egestas ex sit amet euismod. Nunc sodales aliquam velit, quis interdum lectus lacinia ac. Praesent dictum nibh eu metus luctus cursus. Vestibulum eget vulputate urna. Vivamus lorem mi, mollis in lacinia eget, consectetur ac lorem. Fusce commodo arcu a urna rutrum, sit amet auctor risus malesuada. Sed eget pretium tortor.
+
+                Donec tempor, eros eget rutrum pharetra, purus risus venenatis turpis, vitae dapibus metus mi nec sapien. Suspendisse potenti. Praesent suscipit turpis at nunc blandit, a suscipit nisl feugiat. Etiam purus dui, dictum et aliquam sit amet, consequat ac tellus. Donec sit amet tincidunt magna. Integer non neque nec arcu tristique auctor et eu urna. Mauris in risus sapien. Aenean vitae sodales est. Nulla imperdiet consectetur dolor ac pulvinar. In pellentesque sed neque vel tempus. Sed porta nisl id tincidunt ultricies. Mauris sed nunc at sem tincidunt condimentum. Praesent lobortis hendrerit lectus, sed viverra sem efficitur ac. Ut condimentum vulputate ante ac viverra. Sed sapien magna, fringilla ut consequat sit amet, tincidunt at eros.
+
+                Nulla rutrum dapibus felis, at sodales urna posuere vel. Vivamus lobortis ipsum nec purus ornare, sed fermentum ex lobortis. Duis suscipit consequat aliquam. Nullam eu lorem a eros tempus sollicitudin sit amet vel lectus. Nam fermentum nisi leo, imperdiet condimentum nibh fermentum eget. Quisque condimentum feugiat tortor, id placerat nulla pulvinar in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam viverra rutrum augue, sed interdum orci sodales eu. Donec et dapibus est. Vestibulum sem orci, venenatis in ornare et, finibus vel turpis.
+
+                Vestibulum tincidunt enim a turpis volutpat, mattis pulvinar lectus tincidunt. Pellentesque porttitor, nisl eu imperdiet euismod, nisi odio venenatis ipsum, egestas tincidunt nunc tortor et quam. Donec facilisis quam id tortor maximus, luctus tempus urna posuere. Donec eget augue eleifend neque blandit elementum ut at orci. Nam rhoncus quis urna at dictum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi eu congue metus, in tincidunt tortor. Proin porta lacinia ante sed tincidunt. Aenean vulputate faucibus metus quis pulvinar. Nulla a dui vel felis finibus ornare. Donec consequat accumsan ipsum, ac finibus diam blandit vel. Nam lorem odio, mattis eu tristique vitae, molestie vel dui.
+            </div>
+            <div class="event__tags mb-3">
+                <span class="badge rounded-pill bg-secondary">devops</span>
+                <span class="badge rounded-pill bg-secondary">scala</span>
+            </div>
+            <div class="event__for">
+                Для всех кто знает SCALA.
+            </div>
+        </div>
+    </div>
+</div>

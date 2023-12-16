@@ -3,6 +3,7 @@ using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Models.Configuration;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -45,14 +46,16 @@ public class EmailNotification : IEmailSender
     
     public async Task NotificateAsync(Event e)
     {
-        var users = _context.Users.Where(x => x.EmailConfirmed).ToList();
+        var eventUsers = _context.EventUsers
+            .Include(x => x.User)
+            .Where(x => x.User.EmailConfirmed).ToList();
         var title = e.NotificationTemplate.Title;
         var template = e.NotificationTemplate.MessageTemplate;
 
-        foreach (var user in users)
+        foreach (var eventUser in eventUsers)
         {
-            var message = _templateServise.GetEmailMessage(template, user, e);
-            await SendEmailAsync(user.Email, title, message);
+            var message = _templateServise.GetEmailMessage(template, eventUser.User, e);
+            await SendEmailAsync(eventUser.User.Email, title, message);
         }
     }
 }

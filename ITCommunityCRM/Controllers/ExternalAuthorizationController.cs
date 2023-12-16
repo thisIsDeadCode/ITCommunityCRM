@@ -55,6 +55,13 @@ namespace ITCommunityCRM.Controllers
                     }
                     await _userManager.CreateAsync(telegramUser);
                 }
+
+                HttpContext.Response.Cookies.Append("UserId", telegramUser.Id, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                });
+
                 await _userManager.AddLoginAsync(telegramUser, info);
                 await _signInManager.SignInAsync(telegramUser, true);
                 return RedirectToAction("Index", "Home");
