@@ -12,50 +12,43 @@
                     <div class="mb-3">                        
                         <label for="Name" class="form-label">Name</label>
                         <input name="Name" class="form-control" required/>
-                        <div class="invalid-feedback">
-                            Please choose name of event.
-                        </div>
+                        
                     </div>
                     <div class="mb-3">
                         <label for="Description" class="form-label">Description</label>
                         <textarea name=Description class="form-control" id="description" rows="3" required></textarea>
-                        <div class="invalid-feedback">
-                            Please write description of event
-                        </div>
+                        
                     </div>
                     <div class="mb-3 d-flex">
-                        <div class="text-center">
-                            <label for="StartDate">Begin event</label>
-                            <input type="datetime-local" class="input mx-2" name="StartDate" required>
-                            <div class="invalid-feedback">
-                                Please chose date start of event
+                        <div class="d-flex">
+                            <div class='input-group date'>
+                                <label for="StartDate">Begin event</label>
+                                <input type="datetime-local" class="input mx-2" name="StartDate" id="editStart">
+
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <label for="EndDate">Finish event</label>
-                            <input type="datetime-local" class="input mx-2" name="EndDate" required>
-                            <div class="invalid-feedback">
-                                Please chose date finish of event
+                            <div class='input-group date'>
+                                <label for="EndDate">Finish event</label>
+                                <input type="datetime-local" class="input mx-2" name="EndDate" id="editEnd">
+
                             </div>
                         </div>
                     </div>
                     <div class="mb-3 text-center">
                         <label for="NotificationMessageTemplateId" class="form-label"></label>
                         <select name="NotificationMessageTemplateId" class="form-control" asp-items="ViewBag.NotificationMessageTemplateId"></select>
-                        <div class="invalid-feedback">
-                            Please chose notificationtype
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn bg-green">Create</button>
                 </div>
-
             </div>
         </div>
     </div>
 </form>
+
+
 
 
 

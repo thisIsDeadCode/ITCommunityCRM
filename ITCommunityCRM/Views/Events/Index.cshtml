@@ -7,6 +7,8 @@
 
 <link href="~/libs/font-awesome/css/all.min.css" rel="stylesheet" />
 <link href="~/libs/admin-lte/dist/css/adminlte.min.css" rel="stylesheet" />
+
+
 <h1>Menu Event</h1>
 <section class="content-header">
     <div class="container-fluid">
@@ -54,8 +56,9 @@
                                         <th>Name</th>
                                         <th>Notificate type</th>
                                         <th>Time start</th>
-                                        <th>Time finish</th>                                        
-                                        <th style="width: 150px">Actions</th>
+                                        <th>Time finish</th>
+                                        <th>Description</th>                                        
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="searchable" id="tBody">
@@ -75,7 +78,7 @@
                                             <th class="infoTh" data-name="@ev.Description">
                                                 @ev.Description
                                             </th>
-                                            <th class="infoTh d-flex" style="width: 150px" data-name="@ev.Id">
+                                            <th class="infoTh d-flex" data-name="@ev.Id">
                                                 <button id="btnEdit" data-bs-toggle="modal" data-bs-target="#Edit" class="btn btn-sm bg-yellow edit-user">Edit </button>
                                                 <form asp-action="Delete">
                                                     <input class="text-hide" name="Id" value="@ev.Id" />
@@ -157,3 +160,4 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/IndexEvents.js" asp-append-version="true"></script>
 <script src="~/js/validateEvent.js" asp-append-version="true"></script>
+

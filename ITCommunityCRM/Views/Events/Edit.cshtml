@@ -20,28 +20,28 @@
                         
                     </div>
                     <div class="mb-3 d-flex">
-                        <div class="text-center">
-                            <label for="StartDate">Begin event</label>
-                            <input type="datetime-local" class="input mx-2" name="StartDate" id="editStart" required>
-                            <div class="invalid-feedback">
-                                Please chose date start of event
+                        <div class="d-flex">
+                            <div class='input-group date'>
+                                <label for="StartDate">Begin event</label>
+                                <input type="datetime-local" class="input mx-2" name="StartDate" id="editStart" required>
+                                <div class="invalid-feedback">
+                                    Please chose date finish of event
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <label for="EndDate">Finish event</label>
-                            <input type="datetime-local" class="input mx-2" name="EndDate" id="editEnd" required>
-                            <div class="invalid-feedback">
-                                Please chose date finish of event
+                            <div class='input-group date'>
+                                <label for="EndDate">Finish event</label>
+                                <input type="datetime-local" class="input mx-2" name="EndDate" id="editEnd" required>
+                                <div class="invalid-feedback">
+                                    Please chose date finish of event
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="mb-3 text-center">
                         <label for="NotificationMessageTemplateId" class="form-label"></label>
                         <select name="NotificationMessageTemplateId" id="editSelect"  class="form-control" asp-items="ViewBag.NotificationMessageTemplateId"></select>
-                        <div class="invalid-feedback">
-                            Please chose notificationtype
-                        </div>
-                    </div>
+                       </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
