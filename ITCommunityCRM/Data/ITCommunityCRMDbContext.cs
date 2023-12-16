@@ -15,6 +15,10 @@ namespace ITCommunityCRM.Data
         public DbSet<Tag> Tags { get; set; }
 
 
+        public DbSet<EventUser> EventUsers { get; set; }
+
+
+
         public ITCommunityCRMDbContext(DbContextOptions<ITCommunityCRMDbContext> options)
             : base(options)
         {

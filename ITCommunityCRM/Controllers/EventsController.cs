@@ -1,4 +1,5 @@
 ﻿using ITCommunityCRM.Data;
+using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Models.View.Events;
 using ITCommunityCRM.Models.View.Extensions;
 using ITCommunityCRM.Services;
@@ -49,6 +50,79 @@ namespace ITCommunityCRM.Controllers
 
             return View(xevent);
         }
+
+        // GET: Events/Details/5
+        public async Task<IActionResult> Registration(int? id)
+        {
+            if (id == null || _context.Events == null)
+            {
+                return NotFound();
+            }
+
+            var xevent = await _context.Events
+                .Include(x => x.NotificationTemplate)
+                .ThenInclude(x => x.NotificationType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (xevent == null)
+            {
+                return NotFound();
+            }
+
+            if (!HttpContext.Request.Cookies.ContainsKey("UserId"))
+            {
+                var userId = Guid.NewGuid().ToString();
+                var user = new User(userId);
+                user.IsAnonymousUser = true;
+
+                var eventUser = new EventUser()
+                {
+                    EventId = xevent.Id,
+                    Event = xevent,
+
+                    UserId = userId,
+                    User = user
+                };
+
+                _context.Users.Add(user);
+                _context.EventUsers.Add(eventUser);
+                await _context.SaveChangesAsync();
+
+                HttpContext.Response.Cookies.Append("UserId", userId, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                });
+            }
+            else
+            {
+                var isSuccsess = HttpContext.Request.Cookies.TryGetValue("UserId", out string userId);
+                if (isSuccsess)
+                {
+                    var eventUser = _context.EventUsers
+                        .Include(x => x.User)
+                        .FirstOrDefault(x => x.EventId == xevent.Id && x.UserId == userId);
+
+                    if (eventUser == null)
+                    {
+                        _context.EventUsers.Add(new EventUser()
+                        {
+                            EventId = xevent.Id,
+                            UserId = userId
+                        });
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    return View(nameof(Details), xevent);
+                }
+            }
+
+
+            return View(nameof(Details), xevent);
+        }
+
 
         // GET: Events/Create
         public IActionResult Create()
