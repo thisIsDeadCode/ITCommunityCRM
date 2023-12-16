@@ -51,9 +51,10 @@ public class RedirectLinkService
         return dbContext.Events.Where(x => x.Id == eventId).SelectMany(x => x.EventUsers).First(x => x.UserId == userId);
     }
 
-    internal void TrackRedirect(string queries)
+    internal async Task TrackRedirectAsync(string queries, CancellationToken token)
     {
         var userEvent = GetUserEventFromLink(queries);
-        //userEvent
+        userEvent.IsVisitedEvent = true;
+        await dbContext.SaveChangesAsync(token);
     }
 }

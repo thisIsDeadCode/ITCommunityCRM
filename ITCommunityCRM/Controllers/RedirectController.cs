@@ -14,7 +14,7 @@ namespace ITCommunityCRM.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index(CancellationToken token)
         {
             var queries = HttpContext.Request.QueryString.ToString();
             if (string.IsNullOrEmpty(queries))
@@ -23,7 +23,7 @@ namespace ITCommunityCRM.Controllers
             }
 
             var redirectTo = linkService.GetOriginalUrl(queries);
-            linkService.TrackRedirect(queries);
+            await linkService.TrackRedirectAsync(queries, token);
 
             return Redirect(redirectTo);
         }
