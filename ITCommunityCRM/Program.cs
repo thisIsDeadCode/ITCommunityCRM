@@ -37,6 +37,7 @@ builder.Services.AddTransient<EmailNotification>();
 builder.Services.AddTransient<NotificationService>();
 builder.Services.AddTransient<TelegramNotification>();
 builder.Services.AddTransient<TemplateServise>();
+builder.Services.AddTransient<EventService>();
 
 builder.Services.AddScoped<UpdateHandler>();
 builder.Services.AddScoped<ReceiverService>();

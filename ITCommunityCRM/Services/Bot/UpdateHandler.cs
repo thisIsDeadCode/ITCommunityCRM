@@ -1,9 +1,11 @@
 ﻿using ITCommunityCRM.Data;
 using ITCommunityCRM.Data.Models;
 using ITCommunityCRM.Data.Models.Consts;
+using ITCommunityCRM.Models.Configuration;
 using MailKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -23,15 +25,22 @@ namespace ITCommunityCRM.Services.Bot
         private const string HELLO_MESSAGE = "Привет, дорогой друг. Добро пожаловать в наше сообщество.";
         private const string WRONG_EVENT_ID = "Информация о событии не найдена";
         private const string RESIGTER_BUTTON_TEXT = "Участвовать";
+        private const string OPEN_EVENT_BUTTON_TEXT = "Уже участвую";
         private readonly UserManager<User> _userManager;
         private readonly ILogger<UpdateHandler> _logger;
         private readonly ITCommunityCRMDbContext _context;
+        private readonly EventService eventService;
 
-        public UpdateHandler(UserManager<User> userManager, ILogger<UpdateHandler> logger, ITCommunityCRMDbContext context)
+        public UpdateHandler(
+            UserManager<User> userManager,
+            ILogger<UpdateHandler> logger,
+            ITCommunityCRMDbContext context,
+            EventService eventService)
         {
             _userManager = userManager;
             _logger = logger;
             _context = context;
+            this.eventService = eventService;
         }
 
         public async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cancellationToken)
@@ -39,10 +48,35 @@ namespace ITCommunityCRM.Services.Bot
             var handler = update switch
             {
                 { Message: { } message } => BotOnMessageReceived(bot, message, cancellationToken),
+                { CallbackQuery: { } callBackQuery } => BotOnKeyboardPress(bot, callBackQuery, cancellationToken),
                 _ => UnknownUpdateHandlerAsync(update, cancellationToken)
             };
 
             await handler;
+        }
+
+        private async Task BotOnKeyboardPress(ITelegramBotClient bot, CallbackQuery callBackQuery, CancellationToken cancellationToken)
+        {
+            var message = callBackQuery?.Message;
+            var messageButtons = message?.ReplyMarkup?.InlineKeyboard.SelectMany(x => x).ToArray()
+                ?? Array.Empty<InlineKeyboardButton>();
+
+            if (message == null
+                || messageButtons.Length != 1
+                || messageButtons[0].Text != RESIGTER_BUTTON_TEXT
+                || !long.TryParse(callBackQuery?.Data, out var eventId))
+            {
+                await bot.AnswerCallbackQueryAsync(callBackQuery!.Id, "Unknow command", cancellationToken: cancellationToken);
+                return;
+            }
+
+            var user = await TryCreateUser(callBackQuery!.From);
+            var @event = await _context.Events.FirstAsync(x => x.Id == eventId, cancellationToken);
+            await eventService.RegisterUser(@event, user, cancellationToken);
+
+            var button = await GetButtonForEventMessageAsync(@event, user, cancellationToken);
+            await bot.EditMessageReplyMarkupAsync(message.Chat.Id, message.MessageId, new InlineKeyboardMarkup(button),cancellationToken);
+            //await SendEventInvitation(bot, message.Chat.Id, @event, user, cancellationToken);
         }
 
         private async Task BotOnMessageReceived(ITelegramBotClient bot, Message message, CancellationToken cancellationToken)
@@ -55,10 +89,10 @@ namespace ITCommunityCRM.Services.Bot
 
             await TryCreateGroupAsync(message, cancellationToken);
             var user = await TryCreateUser(message.From);
-            await SendResponseToStartCommand(bot, message, cancellationToken);
+            await SendResponseToStartCommand(bot, user, message, cancellationToken);
         }
 
-        private async Task SendResponseToStartCommand(ITelegramBotClient bot, Message message, CancellationToken cancellationToken)
+        private async Task SendResponseToStartCommand(ITelegramBotClient bot, User user, Message message, CancellationToken cancellationToken)
         {
             var chatId = message.Chat.Id;
             var messageParts = message.Text?.Split(" ").ToArray() ?? Array.Empty<string>();
@@ -82,7 +116,7 @@ namespace ITCommunityCRM.Services.Bot
             }
 
             _logger.LogInformation("Find event, sending information to user");
-            await SendEventInvitation(bot, chatId, eventInfo, cancellationToken);
+            await SendEventInvitation(bot, chatId, eventInfo, user, cancellationToken);
         }
 
         // TODO: should be move to another place, duplicate with externalauth controller
@@ -117,15 +151,27 @@ namespace ITCommunityCRM.Services.Bot
         }
 
         // TODO: need change button when already added to event
-        private async Task SendEventInvitation(ITelegramBotClient bot, long chatId, Event @event, CancellationToken cancellationToken)
+        private async Task SendEventInvitation(ITelegramBotClient bot, long chatId, Event @event, User user, CancellationToken cancellationToken)
         {
             var eventInformation = $"{@event.Name}\r\n{@event.Description}";
-            var registerToEventButton = new InlineKeyboardButton(RESIGTER_BUTTON_TEXT) { CallbackData = @event.Id.ToString() }; //{ Url = "https://google.com"};
+            var registerToEventButton = await GetButtonForEventMessageAsync(@event, user, cancellationToken);
             await bot.SendTextMessageAsync(
-                chatId, 
+                chatId,
                 eventInformation,
                 replyMarkup: new InlineKeyboardMarkup(registerToEventButton),
                 cancellationToken: cancellationToken);
+        }
+
+        private async Task<InlineKeyboardButton> GetButtonForEventMessageAsync(Event @event, User user, CancellationToken cancellationToken)
+        {
+            var isRegistered = await eventService.IsUserAlreadyRegister(@event, user, cancellationToken);
+            if (!isRegistered)
+            {
+                return new InlineKeyboardButton(RESIGTER_BUTTON_TEXT) { CallbackData = @event.Id.ToString() };
+            }
+
+            var link = eventService.GetLink(@event);
+            return new InlineKeyboardButton(OPEN_EVENT_BUTTON_TEXT) { Url = link };
         }
 
         // ?? it can be private a chat an user with the bot
